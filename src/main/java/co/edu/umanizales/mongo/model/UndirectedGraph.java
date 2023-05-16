@@ -10,14 +10,14 @@ public class UndirectedGraph extends Graph{
         for(Edge ari:getEdges())
         {
             if(ari.getOrigin()==edge.getOrigin() &&
-                    ari.getDestino()==edge.getDestino() &&
-                    ari.getPeso() == edge.getPeso())
+                    ari.getDestiny()==edge.getDestiny() &&
+                    ari.getWeight() == edge.getWeight())
             {
                 return true;
             }
-            if(ari.getOrigin()==edge.getDestino()&&
-                    ari.getDestino()==edge.getOrigin() &&
-                    ari.getPeso() == edge.getPeso())
+            if(ari.getOrigin()==edge.getDestiny()&&
+                    ari.getDestiny()==edge.getOrigin() &&
+                    ari.getWeight() == edge.getWeight())
             {
                 return true;
             }
@@ -30,7 +30,7 @@ public class UndirectedGraph extends Graph{
         List<Edge> listado= new ArrayList<>();
         for(Edge ari: getEdges())
         {
-            if(ari.getOrigin()==origin || ari.getDestino()==origin)
+            if(ari.getOrigin()==origin || ari.getDestiny()==origin)
             {
                 listado.add(ari);
             }

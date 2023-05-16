@@ -33,7 +33,7 @@ public class Dijkstra implements Serializable{
         {
             //Parado en un vertice del grafo
             DijkstraVertex vertD= new DijkstraVertex(
-                    vertGrafo.getCodigo(),null,(short)0);
+                    vertGrafo.getCode(),null,(short)0);
             DVertex.add(vertD);
         }
     }
@@ -58,7 +58,7 @@ public class Dijkstra implements Serializable{
         {
             throw  new GraphException("No hay ruta ");
         }
-        return obtenerNombresCiudades(ruta);
+        return getCitiesNames(ruta);
     }
     private void calcularDjikstra(DijkstraVertex vertActual)
     {
@@ -90,34 +90,34 @@ public class Dijkstra implements Serializable{
             volver al 2
             */
             DijkstraVertex vertMenorNoVisitado=
-                    obtenerAdyacenciaMenorNoVisitada(adyacencias, vertActual);
+                    getMinorAdjacencyNotVisited(adyacencias, vertActual);
             calcularDjikstra(vertMenorNoVisitado);
 
         }
 
     }
-    public List<String> obtenerNombresCiudades(List<DijkstraVertex> ruta) {
-        List<String> nombresCiudades = new ArrayList<>();
-        for (DijkstraVertex vertice : ruta) {
-            int codigoCiudad = vertice.getCode();
-            Vertex ciudad = graph.getVertex().stream()
-                    .filter(v -> v.getCodigo() == codigoCiudad)
+    public List<String> getCitiesNames(List<DijkstraVertex> route) {
+        List<String> citiesNames = new ArrayList<>();
+        for (DijkstraVertex vertex : route) {
+            int cityCode = vertex.getCode();
+            Vertex city = graph.getVertex().stream()
+                    .filter(v -> v.getCode() == cityCode)
                     .findFirst()
                     .orElse(null);
-            if (ciudad != null) {
-                nombresCiudades.add(((City) ciudad.getDato()).getName());
+            if (city != null) {
+                citiesNames.add(((City) city.getData()).getName());
             }
         }
-        return nombresCiudades;
+        return citiesNames;
     }
 
 
-    public DijkstraVertex obtenerVerticexCodigo(int codigo)
+    public DijkstraVertex obtenerVerticexCodigo(int code)
     {
         // Objetos son referencias en memoria
         for(DijkstraVertex vertD: DVertex)
         {
-            if(vertD.getCode()==codigo)
+            if(vertD.getCode()==code)
             {
                 return vertD;
             }
@@ -125,32 +125,32 @@ public class Dijkstra implements Serializable{
         return null;
     }
 
-    private void actualizarAdyacencias(DijkstraVertex vertActual, List<Edge> adyacencias)
+    private void actualizarAdyacencias(DijkstraVertex actualVortex, List<Edge> adjacencies)
     {
-        //Obtener las adyacencias de verticesD
+        //Obtener las adjacencies de verticesD
         //recorriendo las aristas del grafo
-        // actualizo los pesos y anterior de las adyacencias
+        // actualizo los pesos y anterior de las adjacencies
         // si esta nulo el anterior actualizo el anterior con el vertice
         //actual
         // si no esta nulo comparo si es menor el peso acumulado para
         //actualizar
-        for(Edge ari:adyacencias)
+        for(Edge ari:adjacencies)
         {
-            DijkstraVertex visitado= obtenerVerticexCodigo(ari.getDestino());
+            DijkstraVertex visited= obtenerVerticexCodigo(ari.getDestiny());
             //Actualizarle su origen y peso
-            if(visitado.getBefore()==null)
+            if(visited.getBefore()==null)
             {
                 //NO ha sido visitado
-                visitado.setBefore(vertActual);
-                visitado.setWeight((short)(vertActual.getWeight()+ari.getPeso()));
+                visited.setBefore(actualVortex);
+                visited.setWeight((short)(actualVortex.getWeight()+ari.getWeight()));
             }
             else
             {
-                short pesoAcumulado=(short)(vertActual.getWeight()+ari.getPeso());
-                if(pesoAcumulado < visitado.getWeight())
+                short acumulatedWeight = (short)(actualVortex.getWeight()+ari.getWeight());
+                if(acumulatedWeight < visited.getWeight())
                 {
-                    visitado.setBefore(vertActual);
-                    visitado.setWeight(pesoAcumulado);
+                    visited.setBefore(actualVortex);
+                    visited.setWeight(acumulatedWeight);
                 }
             }
         }
@@ -158,49 +158,49 @@ public class Dijkstra implements Serializable{
     }
 
 
-    private DijkstraVertex obtenerAdyacenciaMenorNoVisitada(List<Edge> adyacencias,
-                                                             DijkstraVertex anterior)
+    private DijkstraVertex getMinorAdjacencyNotVisited(List<Edge> adjacencies,
+                                                       DijkstraVertex behind)
     {
         //Menor peso acumulado
         // cuando dos vertices tienen el mismo salta a cualquiera
-        short menor= Short.MAX_VALUE;
-        DijkstraVertex verticeSalto =null;
-        for(Edge ari: adyacencias)
+        short minor = Short.MAX_VALUE;
+        DijkstraVertex vertexJump = null;
+        for(Edge ari: adjacencies)
         {
-            int codigoVerticeAnalizar=0;
+            int vertexCodeAnalise = 0;
             //Si mi grafo es dirigido a no es dirigido
             if(graph instanceof UndirectedGraph)
             {
                 //Siempre voy a obtener el vertice que voy a analizar con el destino
-                codigoVerticeAnalizar= ari.getOrigin();
+                vertexCodeAnalise= ari.getOrigin();
             }
             else
             {
                 // Yo tengo que determinar si debo buscar el vertice a analizar con el
                 // origen de la arista o con el destino
-                codigoVerticeAnalizar= ari.getOrigin();
-                if(ari.getOrigin()== anterior.getCode())
+                vertexCodeAnalise= ari.getOrigin();
+                if(ari.getOrigin()== behind.getCode())
                 {
-                    codigoVerticeAnalizar= ari.getDestino();
+                    vertexCodeAnalise= ari.getDestiny();
                 }
 
             }
-            DijkstraVertex vertAdyacente = obtenerVerticexCodigo(codigoVerticeAnalizar);
+            DijkstraVertex vertAdyacente = obtenerVerticexCodigo(vertexCodeAnalise);
 
             if(!vertAdyacente.isCheck()) //Me interesan los que no estén marcados
             {
-                if(vertAdyacente.getWeight() < menor)
+                if(vertAdyacente.getWeight() < minor)
                 {
                     //Actualizar el menor  y marcar ese vertice como al que debo
                     //saltar
-                    menor= vertAdyacente.getWeight();
-                    verticeSalto = vertAdyacente;
+                    minor= vertAdyacente.getWeight();
+                    vertexJump = vertAdyacente;
                 }
             }
 
         }
         //Se puede presentar el bloqueo y hay que saltar a cualquiera
-        if(verticeSalto == null)
+        if(vertexJump == null)
         {
             //Un bloqueo salto a cualquiera no marcado
             for(DijkstraVertex vertD: DVertex)
@@ -211,7 +211,6 @@ public class Dijkstra implements Serializable{
                 }
             }
         }
-        return verticeSalto;
+        return vertexJump;
     }
-
 }

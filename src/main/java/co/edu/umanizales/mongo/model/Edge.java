@@ -11,12 +11,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Edge implements Serializable {
     private int origin;
-    private int destino;
-    private short peso;
+    private int destiny;
+    private short weight;
 
     @Override
     public String toString() {
-        return "Arista{" + "origen=" + origin + ", destino=" + destino + ", peso=" + peso + '}';
+        return "Arista{" + "origen=" + origin + ", destino=" + destiny + ", peso=" + weight + '}';
     }
 
 
