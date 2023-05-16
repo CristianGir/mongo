@@ -2,6 +2,7 @@ package co.edu.umanizales.mongo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -10,6 +11,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 public class Edge implements Serializable {
+    @Id
+    private String edgeId;
     private int origin;
     private int destiny;
     private short weight;

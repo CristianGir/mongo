@@ -105,13 +105,11 @@ public class Dijkstra implements Serializable{
                     .findFirst()
                     .orElse(null);
             if (city != null) {
-                citiesNames.add(((City) city.getData()).getName());
+                citiesNames.add(" " + city.getData().getName());
             }
         }
         return citiesNames;
     }
-
-
     public DijkstraVertex obtenerVerticexCodigo(int code)
     {
         // Objetos son referencias en memoria
