@@ -1,9 +1,6 @@
 package co.edu.umanizales.mongo.model.dijkstra;
 
-import co.edu.umanizales.mongo.model.Edge;
-import co.edu.umanizales.mongo.model.Graph;
-import co.edu.umanizales.mongo.model.UndirectedGraph;
-import co.edu.umanizales.mongo.model.Vertex;
+import co.edu.umanizales.mongo.model.*;
 import co.edu.umanizales.mongo.model.exception.GraphException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,7 +38,7 @@ public class Dijkstra implements Serializable{
         }
     }
 
-    public List<DijkstraVertex> calcularDjikstra() throws GraphException
+    public List<String> calcularDjikstra() throws GraphException
     {
         DijkstraVertex vertActual;
         //1. Pararme en el origen
@@ -61,9 +58,8 @@ public class Dijkstra implements Serializable{
         {
             throw  new GraphException("No hay ruta ");
         }
-        return ruta;
+        return obtenerNombresCiudades(ruta);
     }
-
     private void calcularDjikstra(DijkstraVertex vertActual)
     {
         /*
@@ -100,6 +96,21 @@ public class Dijkstra implements Serializable{
         }
 
     }
+    public List<String> obtenerNombresCiudades(List<DijkstraVertex> ruta) {
+        List<String> nombresCiudades = new ArrayList<>();
+        for (DijkstraVertex vertice : ruta) {
+            int codigoCiudad = vertice.getCode();
+            Vertex ciudad = graph.getVertex().stream()
+                    .filter(v -> v.getCodigo() == codigoCiudad)
+                    .findFirst()
+                    .orElse(null);
+            if (ciudad != null) {
+                nombresCiudades.add(((City) ciudad.getDato()).getName());
+            }
+        }
+        return nombresCiudades;
+    }
+
 
     public DijkstraVertex obtenerVerticexCodigo(int codigo)
     {

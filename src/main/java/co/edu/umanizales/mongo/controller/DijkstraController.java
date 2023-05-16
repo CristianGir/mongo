@@ -23,9 +23,9 @@ public class DijkstraController {
         Graph graph = new UndirectedGraph();
 
         // Agregar vértices al grafo
-        Vertex vertexA = new Vertex(new City("A", "Manizales"), 1);
-        Vertex vertexB = new Vertex(new City("B", "Pereira"), 2);
-        Vertex vertexC = new Vertex(new City("C", "Cartago"), 3);
+        City vertexA = new City("A", "Manizales");
+        City vertexB = new City("B", "Pereira");
+        City vertexC = new City("C", "Cartago");
         graph.addVertex(vertexA);
         graph.addVertex(vertexB);
         graph.addVertex(vertexC);

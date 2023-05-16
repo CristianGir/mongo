@@ -21,7 +21,7 @@ public abstract class Graph implements Serializable {
         this.edges= new ArrayList<>();
     }
 
-    public void addVertex(Object data)
+    public void addVertex(City data)
     {
         Vertex newVertex= new Vertex(data, ++consecutive);
         vertex.add(newVertex);
