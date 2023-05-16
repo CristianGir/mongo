@@ -1,14 +1,15 @@
 package co.edu.umanizales.mongo.controller;
 
-import co.edu.umanizales.mongo.model.City;
-import co.edu.umanizales.mongo.model.Dijkstra;
-import co.edu.umanizales.mongo.model.Edge;
-import org.springframework.web.client.RestTemplate;
+import co.edu.umanizales.mongo.model.*;
 import co.edu.umanizales.mongo.model.dto.ResponseDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import co.edu.umanizales.mongo.model.exception.GraphException;
+import co.edu.umanizales.mongo.model.dijkstra.Dijkstra;
+import co.edu.umanizales.mongo.model.dijkstra.DijkstraVertex;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -16,34 +17,31 @@ import java.util.List;
 @CrossOrigin(origins="http://localhost:4200")
 public class DijkstraController {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final Dijkstra dijkstra;
+    @GetMapping("/dijkstra")
+    public ResponseEntity<ResponseDTO> dijkstra() throws GraphException {
+        // Crear el grafo
+        Graph graph = new UndirectedGraph();
 
-    @Autowired
-    public DijkstraController(Dijkstra dijkstra) {
-        this.dijkstra = dijkstra;
+        // Agregar vértices al grafo
+        Vertex vertexA = new Vertex(new City("A", "Manizales"), 1);
+        Vertex vertexB = new Vertex(new City("B", "Pereira"), 2);
+        Vertex vertexC = new Vertex(new City("C", "Cartago"), 3);
+        graph.addVertex(vertexA);
+        graph.addVertex(vertexB);
+        graph.addVertex(vertexC);
+
+        // Agregar aristas al grafo
+        Edge edgeAB = new Edge(1, 2, (short) 5);
+        Edge edgeAC = new Edge(1, 3, (short) 3);
+        Edge edgeBC = new Edge(2, 3, (short) 2);
+        graph.addEdge(edgeAB);
+        graph.addEdge(edgeAC);
+        graph.addEdge(edgeBC);
+
+        // Crear objeto Dijkstra
+        short origin = 1;
+        short destiny = 3;
+        Dijkstra dijkstra = new Dijkstra(origin, destiny, graph);
+        return new ResponseEntity<>(new ResponseDTO(200, dijkstra.calcularDjikstra(), null), HttpStatus.OK);
     }
-
-    @PostMapping("/shortest-path/{startid}/{endid}")
-    public ResponseEntity<ResponseDTO> calculateShortestPath(@PathVariable String startid,@PathVariable String endid, @RequestBody List<City> cities, @RequestBody List<Edge> edges) {
-        try {
-            City startCity = null, endCity = null;
-            for (City city : cities) {
-                if (city.getCityId().equals(startid)) {
-                    startCity = city;
-                }
-                if (city.getCityId().equals(endid)) {
-                    endCity = city;
-                }
-            }
-            if (startCity == null || endCity == null) {
-                return new ResponseEntity<>(new ResponseDTO(404, null, null), HttpStatus.OK);
-            }
-            List<City> shortestPath = dijkstra.calculateShortestPath(cities, edges, startCity, endCity);
-            return new ResponseEntity<>(new ResponseDTO(200, shortestPath, null), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseDTO(500, null, null), HttpStatus.OK);
-        }
-    }
-
 }

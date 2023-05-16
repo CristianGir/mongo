@@ -34,7 +34,8 @@ public class EdgeController {
         edgeRepo.deleteById(id);
         return new ResponseEntity<>(new ResponseDTO(200, "Arista eliminada", null), HttpStatus.OK);
     }
-    @PutMapping("/update/edge/{id}")
+
+    /*@PutMapping("/update/edge/{id}")
     public ResponseEntity<ResponseDTO> updateUser(@PathVariable String id, @RequestBody Edge edge) {
         Optional<Edge> edgeOptional = edgeRepo.findById(id);
         if (edgeOptional.isPresent()) {
@@ -47,5 +48,6 @@ public class EdgeController {
         } else {
             return new ResponseEntity<>(new ResponseDTO(404, null, null), HttpStatus.OK);
         }
-    }
+    }*/
+
 }
