@@ -22,7 +22,7 @@ public class CityController {
         return new ResponseEntity<>(new ResponseDTO(200, cityRepo.save(city), null), HttpStatus.OK);
     }
     @GetMapping("/city/{id}")
-    public ResponseEntity<ResponseDTO> getCityById(@PathVariable String id){
+    public ResponseEntity<ResponseDTO> getCityById(@PathVariable int id){
         return new ResponseEntity<>(new ResponseDTO(200, cityRepo.findById(id), null), HttpStatus.OK);
     }
     @GetMapping("/city")
@@ -30,12 +30,12 @@ public class CityController {
         return new ResponseEntity<>(new ResponseDTO(200, cityRepo.findAll(), null), HttpStatus.OK);
     }
     @DeleteMapping("/city/{id}")
-    public ResponseEntity<ResponseDTO> deleteCity(@PathVariable String id) {
+    public ResponseEntity<ResponseDTO> deleteCity(@PathVariable int id) {
         cityRepo.deleteById(id);
         return new ResponseEntity<>(new ResponseDTO(200, "Ciudad eliminada", null), HttpStatus.OK);
     }
     @PutMapping("/update/city/{id}")
-    public ResponseEntity<ResponseDTO> updateUser(@PathVariable String id, @RequestBody String name) {
+    public ResponseEntity<ResponseDTO> updateUser(@PathVariable int id, @RequestBody String name) {
         Optional<City> cityOptional = cityRepo.findById(id);
         if (cityOptional.isPresent()) {
             City existingCity = cityOptional.get();

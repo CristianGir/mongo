@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 public class City {
     @Id
-    private String cityId;
+    private int cityId;
+
     private String name;
 }

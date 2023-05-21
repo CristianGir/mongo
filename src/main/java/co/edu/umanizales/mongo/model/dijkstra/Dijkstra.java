@@ -96,6 +96,13 @@ public class Dijkstra implements Serializable{
         }
 
     }
+    public List<String> reverseArray(List<String> array) {
+        List<String> newArray = new ArrayList<>();
+        for (int i = array.size() - 1; i >= 0; i--) {
+            newArray.add(array.get(i));
+        }
+        return newArray;
+    }
     public List<String> getCitiesNames(List<DijkstraVertex> route) {
         List<String> citiesNames = new ArrayList<>();
         for (DijkstraVertex vertex : route) {
@@ -108,7 +115,7 @@ public class Dijkstra implements Serializable{
                 citiesNames.add(" " + city.getData().getName());
             }
         }
-        return citiesNames;
+        return reverseArray(citiesNames);
     }
     public DijkstraVertex obtenerVerticexCodigo(int code)
     {
